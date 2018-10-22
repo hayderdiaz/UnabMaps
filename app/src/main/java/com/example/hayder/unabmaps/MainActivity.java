@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         marcadores.add(new MarkerOptions().position(new LatLng(7.116482,-73.105365)).title("Cafeteria"));
 
 
-        //hellon word hola mundo
+        //hellon word hola mundo asas
 
         Button buscar = findViewById(R.id.buttonBuscar);
         EditText campo = findViewById(R.id.campoBusqueda);
