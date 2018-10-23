@@ -6,20 +6,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
+import android.location.Location;
+import android.support.annotation.NonNull;
+import java.util.ArrayList;
+import java.util.List;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
-
-// classes needed to initialize map
-
 // classes needed to add location layer
-import android.location.Location;
-import android.support.annotation.NonNull;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.CameraMode;
 import com.mapbox.android.core.location.LocationEngine;
@@ -28,56 +27,16 @@ import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineListener;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, LocationEngineListener, PermissionsListener {
 
     private MapView mapView;
-    private MapboxMap mapboxMap;
+    private MapboxMap map;
     private PermissionsManager permissionsManager;
     private LocationLayerPlugin locationLayerPlugin;
     private LocationEngine locationEngine;
     private Location originLocation;
-
-    @SuppressWarnings( {"MissingPermission"})
-    private void enableLocationPlugin() {
-        // Check if permissions are enabled and if not request
-        if (PermissionsManager.areLocationPermissionsGranted(this)) {
-            initializeLocationEngine();
-            // Create an instance of the plugin. Adding in LocationLayerOptions is also an optional
-            // parameter
-            LocationLayerPlugin locationLayerPlugin = new LocationLayerPlugin(mapView, mapboxMap);
-
-            // Set the plugin's camera mode
-            locationLayerPlugin.setCameraMode(CameraMode.TRACKING);
-            getLifecycle().addObserver(locationLayerPlugin);
-        } else {
-            permissionsManager = new PermissionsManager((PermissionsListener) this);
-            permissionsManager.requestLocationPermissions(this);
-        }
-    }
-
-    @SuppressWarnings( {"MissingPermission"})
-    private void initializeLocationEngine() {
-        LocationEngineProvider locationEngineProvider = new LocationEngineProvider(this);
-        locationEngine = locationEngineProvider.obtainBestLocationEngineAvailable();
-        locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
-        locationEngine.activate();
-
-        Location lastLocation = locationEngine.getLastLocation();
-        if (lastLocation != null) {
-            originLocation = lastLocation;
-        } else {
-            locationEngine.addLocationEngineListener((LocationEngineListener) this);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +67,10 @@ public class MainActivity extends AppCompatActivity {
         marcadores.add(new MarkerOptions().position(new LatLng(7.11617,-73.104913)).title("Edificio G"));
         marcadores.add(new MarkerOptions().position(new LatLng(7.116482,-73.105365)).title("Cafeteria"));
 
-       //Agrego los marcadores al mapa
+        mapView.getMapAsync(this);
+
+
+        //Agrego los marcadores al mapa
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
@@ -117,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         //Buscador
         Button buscar = findViewById(R.id.buttonBuscar);
@@ -134,17 +97,103 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onMapReady(MapboxMap mapboxMap) {
+        map = mapboxMap;
+        enableLocation();
 
     }
+
+    private void enableLocation(){
+        if (PermissionsManager.areLocationPermissionsGranted(this)){
+            initializeLocationEngine();
+            initializeLocationLayer();
+        }else{
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(this);
+        }
+    }
+
+
+    @SuppressWarnings( {"MissingPermission"})
+    private void initializeLocationEngine() {
+
+        locationEngine = new LocationEngineProvider(this).obtainBestLocationEngineAvailable();
+        locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
+        locationEngine.activate();
+
+        Location lastLocation = locationEngine.getLastLocation();
+        if (lastLocation != null) {
+            originLocation = lastLocation;
+            setCameraPosition(lastLocation);
+        } else {
+            locationEngine.addLocationEngineListener(this);
+        }
+    }
+
+    @SuppressWarnings( {"MissingPermission"})
+    private void initializeLocationLayer(){
+        locationLayerPlugin = new LocationLayerPlugin(mapView, map, locationEngine);
+        locationLayerPlugin.setLocationLayerEnabled(true);
+        locationLayerPlugin.setCameraMode(CameraMode.TRACKING);
+        locationLayerPlugin.setRenderMode(RenderMode.NORMAL);
+    }
+
+    private void setCameraPosition(Location location){
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+                location.getLongitude()),17.0));
+    }
+
+    @Override
+    @SuppressWarnings( {"MissingPermission"})
+    public void onConnected() {
+        locationEngine.requestLocationUpdates();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location!= null){
+            originLocation = location;
+            setCameraPosition(location);
+        }
+    }
+
+    @Override
+    public void onExplanationNeeded(List<String> permissionsToExplain) {
+        //present toast or dialog
+
+    }
+
+    @Override
+    public void onPermissionResult(boolean granted) {
+        if(granted){
+        enableLocation();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
 
     @SuppressWarnings( {"MissingPermission"})
     @Override
     protected void onStart() {
         super.onStart();
-        mapView.onStart();
+        if (locationEngine != null) {
+            locationEngine.requestLocationUpdates();
+        }
         if (locationLayerPlugin != null) {
             locationLayerPlugin.onStart();
         }
+        mapView.onStart();
+
     }
 
 
@@ -163,10 +212,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mapView.onStop();
-        if (locationLayerPlugin != null) {
-            locationLayerPlugin.onStart();
+        if (locationEngine != null) {
+            locationEngine.removeLocationUpdates();
         }
+        if (locationLayerPlugin != null) {
+            locationLayerPlugin.onStop();
+        }
+        mapView.onStop();
     }
 
     @Override
@@ -176,31 +228,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
     }
 
-    //public void onConnected() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (locationEngine != null) {
+            locationEngine.deactivate();
+        }
+        mapView.onDestroy();
+    }
 
-    //}
-
-
-    //public void onLocationChanged(Location location) {
-
-    //}
-
-
-   // public void onMapReady(MapboxMap mapboxMap) {
-   //   this.mapboxMap = mapboxMap;
-   //     enableLocationPlugin();
-   // }
 }
 
 
