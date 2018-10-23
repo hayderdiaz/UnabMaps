@@ -26,9 +26,8 @@
         mapbox:mapbox_styleUrl="mapbox://styles/mapbox/streets-v10"
         mapbox:mapbox_cameraZoom="17"
         mapbox:mapbox_cameraBearing="34.33"
-        >
+        />
 
-    </com.mapbox.mapboxsdk.maps.MapView>
 
     <Button
         android:id="@+id/buttonBuscar"
