@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
-
 
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        mapbox:mapbox_cameraBearing="34.33"
         mapbox:mapbox_cameraTargetLat="7.11745307258057"
         mapbox:mapbox_cameraTargetLng="-73.10520529747009"
-        mapbox:mapbox_styleUrl="mapbox://styles/mapbox/streets-v10"
-        mapbox:mapbox_cameraZoom="17"
-        mapbox:mapbox_cameraBearing="34.33"
-        />
+        mapbox:mapbox_cameraZoom="15"
+        mapbox:mapbox_styleUrl="mapbox://styles/mapbox/streets-v10" />
 
     <EditText
         android:id="@+id/campoBusqueda"
-        android:layout_width="wrap_content"
+        android:layout_width="241dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/buttonBuscar"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="21dp"
-        android:ems="10"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="-8dp"
+        android:backgroundTint="@color/cardview_dark_background"
+        android:ems="1"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:text=""
+        android:textColorLink="@color/cardview_dark_background"
+        tools:text="" />
 
     <Button
         android:id="@+id/buttonBuscar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="37dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="51dp"
         android:text="Buscar" />
 
 </RelativeLayout>

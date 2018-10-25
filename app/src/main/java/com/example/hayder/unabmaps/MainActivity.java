@@ -95,14 +95,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for(int i =0;i<marcadores.size();i++){
                     if(marcadores.get(i).getTitle().equals(campo.getText().toString())){
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marcadores.get(i).getPosition().getLatitude(),
-                                marcadores.get(i).getPosition().getLongitude()),30.0));
+                                marcadores.get(i).getPosition().getLongitude()),40.0));
                         encontro=true;
                     }
                 }
                 if(encontro==false){
                     Toast.makeText(MainActivity.this,"no encontrado",Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
