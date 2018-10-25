@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -87,14 +89,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         buscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cambio = new Intent(MainActivity.this,Otra.class);
-                startActivity(cambio);
-
+                //Intent cambio = new Intent(MainActivity.this,Otra.class);
+                //startActivity(cambio);
+                boolean encontro =false;
                 for(int i =0;i<marcadores.size();i++){
                     if(marcadores.get(i).getTitle().equals(campo.getText().toString())){
-
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marcadores.get(i).getPosition().getLatitude(),
+                                marcadores.get(i).getPosition().getLongitude()),30.0));
+                        encontro=true;
                     }
                 }
+                if(encontro==false){
+                    Toast.makeText(MainActivity.this,"no encontrado",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
