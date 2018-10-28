@@ -13,34 +13,37 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:animateLayoutChanges="true"
         mapbox:mapbox_cameraBearing="34.33"
+        mapbox:mapbox_cameraTilt="50"
         mapbox:mapbox_cameraTargetLat="7.11745307258057"
         mapbox:mapbox_cameraTargetLng="-73.10520529747009"
         mapbox:mapbox_cameraZoom="15"
         mapbox:mapbox_styleUrl="mapbox://styles/mapbox/streets-v10" />
 
+    <Button
+        android:id="@+id/buttonBuscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="51dp"
+        android:text="@string/buscar" />
+
     <EditText
         android:id="@+id/campoBusqueda"
-        android:layout_width="241dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/buttonBuscar"
         android:layout_marginStart="24dp"
         android:layout_marginTop="-8dp"
+        android:layout_toLeftOf="@id/buttonBuscar"
         android:backgroundTint="@color/cardview_dark_background"
         android:ems="1"
         android:inputType="textPersonName"
         android:text=""
         android:textColorLink="@color/cardview_dark_background"
         tools:text="" />
-
-    <Button
-        android:id="@+id/buttonBuscar"
-        android:layout_width="wrap_content"
-        android:layout_height="37dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="51dp"
-        android:text="Buscar" />
 
 </RelativeLayout>

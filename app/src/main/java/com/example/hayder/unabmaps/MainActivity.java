@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -79,9 +80,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (int i = 0; i<marcadores.size();i++) {
                     mapboxMap.addMarker(marcadores.get(i));
                 }
+                    mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
+                        @Override
+                        public boolean onMarkerClick(@NonNull Marker marker) {
+                            Intent cambio = new Intent(MainActivity.this,Otra.class);
+                            startActivity(cambio);
+                            return false;
+                        }
+                    });
+
             }
         });
-
 
         //Buscador
         Button buscar = findViewById(R.id.buttonBuscar);
@@ -89,17 +98,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         buscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent cambio = new Intent(MainActivity.this,Otra.class);
-                //startActivity(cambio);
                 boolean encontro =false;
                 for(int i =0;i<marcadores.size();i++){
                     if(marcadores.get(i).getTitle().equals(campo.getText().toString())){
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marcadores.get(i).getPosition().getLatitude(),
-                                marcadores.get(i).getPosition().getLongitude()),40.0));
+                                marcadores.get(i).getPosition().getLongitude()),50.0));
                         encontro=true;
                     }
                 }
-                if(encontro==false){
+                if(!encontro){
                     Toast.makeText(MainActivity.this,"no encontrado",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -111,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(MapboxMap mapboxMap) {
         map = mapboxMap;
         enableLocation();
-
     }
 
     private void enableLocation(){
@@ -123,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             permissionsManager.requestLocationPermissions(this);
         }
     }
-
 
     @SuppressWarnings( {"MissingPermission"})
     private void initializeLocationEngine() {
@@ -151,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void setCameraPosition(Location location){
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
-                location.getLongitude()),17.0));
+                location.getLongitude()),15.0));
     }
 
     @Override
