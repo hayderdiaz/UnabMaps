@@ -19,7 +19,9 @@
         mapbox:mapbox_cameraTargetLat="7.11745307258057"
         mapbox:mapbox_cameraTargetLng="-73.10520529747009"
         mapbox:mapbox_cameraZoom="15"
-        mapbox:mapbox_styleUrl="mapbox://styles/mapbox/streets-v10" />
+        mapbox:mapbox_styleUrl="mapbox://styles/mapbox/streets-v10" >
+
+    </com.mapbox.mapboxsdk.maps.MapView>
 
     <Button
         android:id="@+id/buttonBuscar"
@@ -45,5 +47,17 @@
         android:text=""
         android:textColorLink="@color/cardview_dark_background"
         tools:text="" />
+
+    <AutoCompleteTextView
+        android:id="@+id/campoBusqAvan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/campoBusqueda"
+        android:layout_toLeftOf="@id/buttonBuscar"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="65dp"
+        android:text="AutoCompleteTextView" />
+
+
 
 </RelativeLayout>

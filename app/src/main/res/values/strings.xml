@@ -3,4 +3,15 @@
     <string name="user_location_permission_explanation" translatable="false">This app needs location permissions in order to show its functionality.</string>
     <string name="user_location_permission_not_granted" translatable="false">You didn\'t grant location permissions.</string>
     <string name="buscar" translatable="false">Buscar</string>
+    
+    <string-array name="paises_array">
+        <item>Edificio L</item>
+        <item>Edificio J</item>
+        <item>Edificio K</item>
+        <item>Biblioteca</item>
+        <item>Auditorio Mayor</item>
+        <item>Auditorio Menor</item>
+        <item>Edificio Administrativo</item>
+    </string-array>
+
 </resources>

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.location.Location;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -71,18 +75,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marcadores.add(new MarkerOptions().position(new LatLng(7.116482,-73.105365)).title("Cafeteria"));
 
         mapView.getMapAsync(this);
-
+        //IconFactory iconFactory= IconFactory.getInstance(MainActivity.this);
+        //Icon icon = iconFactory.fromResource(R.drawable.map_marker_light);
 
         //Agrego los marcadores al mapa
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
                 for (int i = 0; i<marcadores.size();i++) {
-                    mapboxMap.addMarker(marcadores.get(i));
+                    map.addMarker(marcadores.get(i));
                 }
                     mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
                         @Override
                         public boolean onMarkerClick(@NonNull Marker marker) {
+                            Toast.makeText(MainActivity.this,"Marcador pulsado:\n" +
+                                    marker.getTitle(),Toast.LENGTH_LONG).show();
                             Intent cambio = new Intent(MainActivity.this,Otra.class);
                             startActivity(cambio);
                             return false;
@@ -92,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        //Buscador
+         //Buscador
         Button buscar = findViewById(R.id.buttonBuscar);
         EditText campo = findViewById(R.id.campoBusqueda);
         buscar.setOnClickListener(new View.OnClickListener() {
@@ -101,9 +108,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 boolean encontro =false;
                 for(int i =0;i<marcadores.size();i++){
                     if(marcadores.get(i).getTitle().equals(campo.getText().toString())){
+                        map.addMarker(marcadores.get(i).icon(IconFactory.getInstance(getApplicationContext()).fromResource(R.drawable.map_marker_light)));
                         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(marcadores.get(i).getPosition().getLatitude(),
                                 marcadores.get(i).getPosition().getLongitude()),50.0));
-                        encontro=true;
+                    encontro=true;
                     }
                 }
                 if(!encontro){
@@ -111,9 +119,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
+        //Buscador Avanzado
+        AutoCompleteTextView auto = findViewById(R.id.campoBusqAvan);
+        ArrayAdapter<String> adapter;
+        //String otro=marcadores.get(1).getTitle();
+        String[]titulo=getResources().getStringArray(R.array.paises_array);
+        //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Integer.parseInt((marcadores.get(0).getTitle())));
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titulo);
+        auto.setThreshold(2);
+        auto.setAdapter(adapter);
+
     }
 
-
+//-----------------------------------------------------------------------------------------------------------------------------
     @Override
     public void onMapReady(MapboxMap mapboxMap) {
         map = mapboxMap;
