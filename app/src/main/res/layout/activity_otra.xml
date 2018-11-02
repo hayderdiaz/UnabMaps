@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".Otra">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/direction_arrive"
+        tools:layout_editor_absoluteX="189dp"
+        tools:layout_editor_absoluteY="272dp" />
 </android.support.constraint.ConstraintLayout>

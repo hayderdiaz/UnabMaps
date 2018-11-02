@@ -20,7 +20,6 @@
         mapbox:mapbox_cameraTargetLng="-73.10520529747009"
         mapbox:mapbox_cameraZoom="15"
         mapbox:mapbox_styleUrl="mapbox://styles/mapbox/streets-v10" >
-
     </com.mapbox.mapboxsdk.maps.MapView>
 
     <Button
@@ -44,20 +43,27 @@
         android:backgroundTint="@color/cardview_dark_background"
         android:ems="1"
         android:inputType="textPersonName"
-        android:text=""
         android:textColorLink="@color/cardview_dark_background"
         tools:text="" />
+
+    <!--<Button
+        android:id="@+id/buttonBuscar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="67dp"
+        android:layout_marginEnd="37dp"
+        android:text="BusAvan" />
 
     <AutoCompleteTextView
         android:id="@+id/campoBusqAvan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/campoBusqueda"
-        android:layout_toLeftOf="@id/buttonBuscar"
         android:layout_alignParentTop="true"
         android:layout_marginTop="65dp"
-        android:text="AutoCompleteTextView" />
-
-
+        android:layout_toLeftOf="@id/buttonBuscar"
+        android:text="Buscador" />-->
 
 </RelativeLayout>

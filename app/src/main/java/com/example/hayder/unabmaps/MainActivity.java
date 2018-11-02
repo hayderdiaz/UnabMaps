@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -58,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         ArrayList<MarkerOptions> marcadores = new ArrayList<MarkerOptions>();
         marcadores.add(new MarkerOptions().position(new LatLng(7.117275,-73.105055)).title("Edificio N"));
         marcadores.add(new MarkerOptions().position(new LatLng(7.116919,-73.105435)).title("Banco de Bogota"));
-        marcadores.add(new MarkerOptions().position(new LatLng(7.116929,-73.105445)).title("Unab Creative"));
+        marcadores.add(new MarkerOptions().position(new LatLng(7.117097,-73.105351)).title("Unab Creative"));
         marcadores.add(new MarkerOptions().position(new LatLng(7.116212,-73.105396)).title("Edificio L"));
-        marcadores.add(new MarkerOptions().position(new LatLng(7.115847,-73.10561)).title("Edificio k"));
+        marcadores.add(new MarkerOptions().position(new LatLng(7.115847,-73.10561)).title("Edificio K"));
         marcadores.add(new MarkerOptions().position(new LatLng(7.115831,-73.105481)).title("Edificio J"));
         marcadores.add(new MarkerOptions().position(new LatLng(7.115847,-73.105266)).title("Edificio I"));
         marcadores.add(new MarkerOptions().position(new LatLng(7.11585,-73.105105)).title("Edificio H"));
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Toast.makeText(MainActivity.this,"Marcador pulsado:\n" +
                                     marker.getTitle(),Toast.LENGTH_LONG).show();
                             Intent cambio = new Intent(MainActivity.this,Otra.class);
+                            cambio.putExtra("nombre",marker.getTitle());
                             startActivity(cambio);
                             return false;
                         }
@@ -119,16 +121,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
-        //Buscador Avanzado
-        AutoCompleteTextView auto = findViewById(R.id.campoBusqAvan);
-        ArrayAdapter<String> adapter;
-        //String otro=marcadores.get(1).getTitle();
-        String[]titulo=getResources().getStringArray(R.array.paises_array);
-        //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Integer.parseInt((marcadores.get(0).getTitle())));
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titulo);
-        auto.setThreshold(2);
-        auto.setAdapter(adapter);
 
+
+        //Buscador Avanzado
+        //Button buscar1 = findViewById(R.id.buttonBuscar1);
+        //final AutoCompleteTextView campoBusqAvan = findViewById(R.id.campoBusqAvan);
+        //campoBusqAvan.setThreshold(2);
+        //ArrayAdapter<MarkerOptions> adapter = new ArrayAdapter<MarkerOptions>(this, android.R.layout.simple_dropdown_item_1line, marcadores);
+        //campoBusqAvan.setAdapter(adapter);
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------
